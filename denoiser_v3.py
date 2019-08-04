@@ -176,14 +176,14 @@ def test_and_write(path, model, noise_level=None):
     denoised_pcm = snippets_to_pcm(denoised_snips)
     noisy_pcm = snippets_to_pcm(snips)
 
-    sf.write('/home/timlab/Music/denoising-project/denoised/autoencoder.flac', denoised_pcm, samplerate=44100, format='flac', subtype='PCM_16')
-    sf.write('/home/timlab/Music/denoising-project/noisy/autoencoder.flac', noisy_pcm, samplerate=44100, format='flac', subtype='PCM_16')
+    sf.write('/home/tim/Music/denoising-project/denoised/autoencoder.flac', denoised_pcm, samplerate=44100, format='flac', subtype='PCM_16')
+    sf.write('/home/tim/Music/denoising-project/noisy/autoencoder.flac', noisy_pcm, samplerate=44100, format='flac', subtype='PCM_16')
     return None
 
 
-test_dir = '/home/timlab/Music/Robben Ford/'
-val_library_dirs = ['/home/timlab/Music/Three Days Grace/One-X/']
-train_library_dirs = ['/home/timlab/Music/Rush/', '/home/timlab/Music/Floater/Sink/', '/home/timlab/Music/Floater/The Thief/']
+test_dir = '/home/tim/Music/Robben Ford/'
+val_library_dirs = ['/home/tim/Music/Three Days Grace/One-X/']
+train_library_dirs = ['/home/tim/Music/Rush/', '/home/tim/Music/Floater/Sink/', '/home/tim/Music/Floater/The Thief/']
 
 autoencoder, generator, discriminator = gan_constructor.gan_regularized_autoencoder((20480, 2))
 #autoencoder.layers[0] = keras.models.load_model('denoiser.h5', custom_objects={'grad_flipper':gf.grad_flipper})
@@ -193,7 +193,7 @@ discriminator.compile(optimizer=Nadam(), loss='binary_crossentropy', metrics=['m
 autoencoder.layers[1].trainable = True 
 autoencoder.layers[-1].trainable = False
 autoencoder.compile(optimizer=Nadam(), loss={'model_1':'mean_absolute_error', 'model_2':'binary_crossentropy'},
-                    metrics=['mean_absolute_error', 'mean_squared_error'], loss_weights=[1, 0.005])
+                    metrics=['mean_squared_error'], loss_weights=[1, 0.005])
 
 print('discriminator is trainable? ' + str(discriminator.trainable))
 print('discriminator in combined model trainable? ' + str(autoencoder.layers[-1].trainable))
@@ -230,7 +230,7 @@ for i in range(100):
         progress_bar = '\r' + epoch_str + '[' + dashes + '>' + spaces + '] {} '.format(num_steps + 1)
         num_steps += 1
 
-        for _ in range(3):
+        for _ in range(1):
             losses = discriminator.train_on_batch(discriminator_batch[0], discriminator_batch[1])
         for ind in range(len(discriminator.metrics_names)):
             discrim_metrics_dict[discriminator.metrics_names[ind]].append(losses[ind])
